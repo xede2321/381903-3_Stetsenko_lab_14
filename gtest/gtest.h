@@ -2468,7 +2468,7 @@ class MutexBase {
         << "The current thread is not holding the mutex @" << this;
   }
 
-  // A static mutex may be used before map() is entered.  It may even
+  // A static mutex may be used before main() is entered.  It may even
   // be used before the dynamic initialization stage.  Therefore we
   // must be able to initialize a static mutex object at link time.
   // This means MutexBase has to be a POD and its member variables
@@ -2575,9 +2575,9 @@ extern "C" inline void DeleteThreadLocalValue(void* value_holder) {
 // threads will not be deleted.
 //
 // Google Test only uses global ThreadLocal objects.  That means they
-// will die after map() has returned.  Therefore, no per-thread
+// will die after main() has returned.  Therefore, no per-thread
 // object managed by Google Test will be leaked as long as all threads
-// using Google Test have exited when map() returns.
+// using Google Test have exited when main() returns.
 template <typename T>
 class ThreadLocal {
  public:
@@ -8224,7 +8224,7 @@ const char kInternalRunDeathTestFlag[] = "internal_run_death_test";
 // exit status:  The integer exit information in the format specified
 //               by wait(2)
 // exit code:    The integer code passed to exit(3), _exit(2), or
-//               returned from map()
+//               returned from main()
 class GTEST_API_ DeathTest {
  public:
   // Create returns false if there was an error determining the
@@ -8869,7 +8869,7 @@ INSTANTIATE_TEST_CASE_P(AnotherInstantiationName, FooTest, ValuesIn(pets));
 // AFTER the INSTANTIATE_TEST_CASE_P statement.
 //
 // Please also note that generator expressions (including parameters to the
-// generators) are evaluated in InitGoogleTest(), after map() has started.
+// generators) are evaluated in InitGoogleTest(), after main() has started.
 // This allows the user on one hand, to adjust generator parameters in order
 // to dynamically determine a set of tests to run and on the other hand,
 // give the user a chance to inspect the generated tests with Google Test
@@ -18541,7 +18541,7 @@ class GTEST_API_ UnitTest {
   // Runs all tests in this UnitTest object and prints the result.
   // Returns 0 if successful, or 1 otherwise.
   //
-  // This method can only be called from the map thread.
+  // This method can only be called from the main thread.
   //
   // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
   int Run() GTEST_MUST_USE_RESULT_;
@@ -18641,7 +18641,7 @@ class GTEST_API_ UnitTest {
   //
   // The UnitTest object takes ownership of the given environment.
   //
-  // This method can only be called from the map thread.
+  // This method can only be called from the main thread.
   Environment* AddEnvironment(Environment* env);
 
   // Adds a TestPartResult to the current TestResult object.  All
@@ -18716,14 +18716,14 @@ class GTEST_API_ UnitTest {
 // program.
 //
 // You should call this before RUN_ALL_TESTS() is called, probably in
-// map().  If you use gtest_main, you need to call this before map()
+// main().  If you use gtest_main, you need to call this before main()
 // starts for it to take effect.  For example, you can define a global
 // variable like this:
 //
 //   testing::Environment* const foo_env =
 //       testing::AddGlobalTestEnvironment(new FooEnvironment);
 //
-// However, we strongly recommend you to write your own map() and
+// However, we strongly recommend you to write your own main() and
 // call AddGlobalTestEnvironment() there, as relying on initialization
 // of global variables makes the code harder to read and may cause
 // problems when you register multiple environments from different
@@ -20046,7 +20046,7 @@ bool StaticAssertTypeEq() {
 
 }  // namespace testing
 
-// Use this function in map() to run all tests.  It returns 0 if all
+// Use this function in main() to run all tests.  It returns 0 if all
 // tests are successful, or 1 otherwise.
 //
 // RUN_ALL_TESTS() should be invoked after the command line has been
