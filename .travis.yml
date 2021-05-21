@@ -1,0 +1,12 @@
+language: cpp
+compiler:
+  - clang
+before_script:
+  - mkdir ../build
+  - cd ../build
+script:
+  - cmake ../381903-3_Stetsenko_lab_14
+  - make -j
+  - cd ./test/test_maplib
+notifications:
+  email: false
